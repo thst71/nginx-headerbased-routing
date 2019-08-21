@@ -27,7 +27,7 @@ class BackendController  {
         request.getHeaderNames().asIterator().forEachRemaining(headername -> output.add(String.format("%s: %s", headername, request.getHeader(headername))));
         output.sort(Comparator.naturalOrder());
         output.add(0, "[HEADER] : [VALUE]");
-        output.add(String.format("This is Instance %s", System.getenv("BACKEND")));
+        output.add(String.format("This is Instance %s", System.getProperty("BACKEND", System.getenv("BACKEND"))));
         return String.join("\n", output);
     }
 }
