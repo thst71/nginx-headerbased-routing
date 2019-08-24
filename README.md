@@ -55,4 +55,35 @@ Call a backend through the frontend:
 
 `curl http://localhost:8000/hello` (http://localhost:8000/hello)
 
+```
 
+                                        Header=        +---------------+
+                                      +---------------+|               |
+                                      | customerA      |   backendA    |
+                                      |                |               |
+                                      |                |               |
+                                      |                +---------------+
+                                      | Header=        +---------------+
+                                      +---------------+|               |
+                                      | customerB      |   backendB    |
+     +---------+           +---------+|                |               |
+     |         |  X-COMPOSE|         ||                |               |
+     | frontend|+---------+|         |+                +---------------+
+     |         | Header    | nginx   || Header=        +---------------+
+     |:8000    |           | :9000   ||---------------+|               |
+     +---------+           +---------+| customerC      |   backendC    |
+                                      |                |               |
+                                      |                |               |
+                                      |                +---------------+
+                                      | Header=        +---------------+
+                                      |---------------+|               |
+                                      | customerD      |   backendD    |
+                                      |                |               |
+                                      |                |               |
+                                      |                +---------------+
+                                      | Header=        +---------------+
+                                      +----------------+ backendDefault|
+                                        *alles andere  |               |
+                                                       |               |
+                                                       +---------------+
+```
