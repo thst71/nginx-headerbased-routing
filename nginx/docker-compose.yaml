@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  nginx:
+    build: .
+    image: ug-nginx
+    ports:
+      - 9000:9000
+
+  frontend:
+    image: frontend-server
+    ports:
+      - 8000:8080
+    environment:
+      NGINX_URL: nginx:9000
+      HEADER_NAME: X-COMPOSE
+      HEADER_VALUES: customerA,customerB,customerC,customerD
+
+  backendA:
+    image: backend-server
+    ports:
+      - 9010:8080
+    environment:
+      BACKEND: customerA
+
+  backendB:
+    image: backend-server
+    ports:
+      - 9020:8080
+    environment:
+      BACKEND: customerB
+
+  backendC:
+    image: backend-server
+    ports:
+      - 9030:8080
+    environment:
+      BACKEND: customerC
+
+  backendD:
+    image: backend-server
+    ports:
+      - 9040:8080
+    environment:
+      BACKEND: customerD
+
+  backendDefault:
+    image: backend-server
+    ports:
+      - 9050:8080
+    environment:
+      BACKEND: customerDefault
+
