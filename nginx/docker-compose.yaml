@@ -5,20 +5,40 @@ services:
     image: ug-nginx
     ports:
       - 9000:9000
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   frontend:
+    build:
+      context: ../frontend-server
     image: frontend-server
     ports:
       - 8000:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     environment:
-      NGINX_URL: nginx:9000
+      NGINX_URL: http://nginx:9000
       HEADER_NAME: X-COMPOSE
       HEADER_VALUES: customerA,customerB,customerC,customerD
+
+  backend:
+    build:
+      context: ../backend-server
+    image: backend-server
 
   backendA:
     image: backend-server
     ports:
       - 9010:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
     environment:
       BACKEND: customerA
 
@@ -26,6 +46,11 @@ services:
     image: backend-server
     ports:
       - 9020:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
     environment:
       BACKEND: customerB
 
@@ -33,6 +58,11 @@ services:
     image: backend-server
     ports:
       - 9030:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
     environment:
       BACKEND: customerC
 
@@ -40,6 +70,11 @@ services:
     image: backend-server
     ports:
       - 9040:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
     environment:
       BACKEND: customerD
 
@@ -47,6 +82,11 @@ services:
     image: backend-server
     ports:
       - 9050:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
     environment:
       BACKEND: customerDefault
 

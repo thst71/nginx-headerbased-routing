@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.String.format;
 
@@ -86,14 +86,13 @@ class CallBackendService {
     private String headerName;
     private String[] headerValue;
     private final RestTemplate restTemplate;
-    private final Random randomNumbers;
+    private final static AtomicLong COUNTER = new AtomicLong(0);
 
     public CallBackendService(@Qualifier("headervalues") String[] headerValue,
                               @Qualifier("headername") String headerName,
                               @Qualifier("backendserver") String backendServer,
                               RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
-        this.randomNumbers = new Random();
         this.headerValue = headerValue;
         this.headerName = headerName;
         this.backendServer = backendServer;
@@ -101,7 +100,7 @@ class CallBackendService {
     }
 
     ResponseEntity<String> call(String path) {
-        final String selectedHeader = headerValue[Math.abs(randomNumbers.nextInt()) % headerValue.length];
+        final String selectedHeader = headerValue[(int) (COUNTER.addAndGet(1) % headerValue.length)];
         final URI backendService = URI.create(format("%s%s", backendServer, path));
         log.info("FRONTEND: Routing to {} using header {} = {}", backendService, headerName, selectedHeader);
         RequestEntity entity = RequestEntity.get(backendService)
